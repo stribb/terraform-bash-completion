@@ -3,17 +3,17 @@
 # Bash completion for the terraform command v0.11.7
 #
 # Copyright (C) 2018 Vangelis Tasoulas
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -37,14 +37,14 @@ _terraform()
 	elif [[ ${cword} -ge 2 && ${cur} == -* ]] ; then
 		args="${words[@]:1:${#words[@]}-2}"
 		# Extract the hyphened parameters if any.
-		opts="$(${terrabin} --help ${args[@]} | grep -P '^\s+-' | awk '{print $1}' | awk -F '=' '{ if ($0 ~ /=/) {print $1"="} else {print $1} }')"
+		opts="$(${terrabin} --help ${args[@]} | grep -E '^\s+-' | awk '{print $1}' | awk -F '=' '{ if ($0 ~ /=/) {print $1"="} else {print $1} }')"
 		# And always append --help. Help is something that we can always use.
 		opts="${opts} --help"
 	else
 		if [[ ${cword} -eq 1 ]] ; then
 			# If no parameter has been typed in yet, show all the non-hyphened commands available.
 			# These are always starting with four spaces as of the current latest terraform version (v0.11.7).
-			opts="$(${terrabin} --help | grep -P '^\s\s\s\s\S' | awk '{print $1}')"
+			opts="$(${terrabin} --help | grep -E '^\s\s\s\s\S' | awk '{print $1}')"
 		else
 			case ${words[1]} in
 				apply|console|destroy|fmt|graph|init|plan|providers|push|refresh|validate|force-unlock)
@@ -66,7 +66,7 @@ _terraform()
 				workspace|env|debug|state)
 					# These commands have different subcommands that each one of them may be accepting further agrguments and provide additional --help
 					if [[ ${words[1]} && ${cword} -eq 2 ]]; then
-						opts="${opts} $(${terrabin} --help "${words[1]}" | grep -P '^\s\s\s\s\S' | awk '{print $1}')"
+						opts="${opts} $(${terrabin} --help "${words[1]}" | grep -E '^\s\s\s\s\S' | awk '{print $1}')"
 					else
 						if [[ ${words[1]} == 'state' ]] ; then
 							case ${words[2]} in
